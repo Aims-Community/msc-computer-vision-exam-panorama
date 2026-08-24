@@ -103,6 +103,7 @@ def create_panorama(image_paths, method='SIFT', ratio_thresh=0.75, ransac_thresh
 
         # Print Metrics
         print(f"\n--- Metrics for Pair {pair_index} [{method}] ---")
+        print(f"Estimated Homography Matrix:\n{H if H is not None else 'None'}")
         print(f"Keypoints in Source: {len(kp_src)} | Keypoints in Destination: {len(kp_dst)}")
         print(f"Initial Matches (Lowe's Test): {len(initial_matches)}")
         print(f"RANSAC Inliers: {inliers_count}")
@@ -176,9 +177,9 @@ if __name__ == '__main__':
     test_image_paths = ['testImages/left.png', 'testImages/right.png', 'testImages/top.png']
 
     # Run 1: SIFT Pipeline
-    print("=== RUNNING SIFT PIPELINE ===")
-    sift_panorama = create_panorama(test_image_paths, method='SIFT')
+    # print("=== RUNNING SIFT PIPELINE ===")
+    # sift_panorama = create_panorama(test_image_paths, method='SIFT')
 
     # Run 2: ORB Pipeline for Comparative Analysis
-    # print("\n=== RUNNING ORB PIPELINE ===")
-    # orb_panorama = create_panorama(test_image_paths, method='ORB')
+    print("\n=== RUNNING ORB PIPELINE ===")
+    orb_panorama = create_panorama(test_image_paths, method='ORB')

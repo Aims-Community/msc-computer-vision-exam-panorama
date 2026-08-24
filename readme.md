@@ -61,3 +61,61 @@ Ensure you have Python installed alongside the following dependencies:
 pip install opencv-python numpy matplotlib
 python ass1.py
 ```
+
+
+
+
+
+python 22424761.py
+=== RUNNING SIFT PIPELINE ===
+[✓] Saved prepared grayscale image: prepared_grayscale_img_1.jpg
+[✓] Saved prepared grayscale image: prepared_grayscale_img_2.jpg
+[✓] Saved prepared grayscale image: prepared_grayscale_img_3.jpg
+[✓] Saved keypoints visualization (10136 points): keypoints_img_1_SIFT.jpg
+[✓] Saved keypoints visualization (10906 points): keypoints_img_2_SIFT.jpg
+[✓] Saved keypoints visualization (12114 points): keypoints_img_3_SIFT.jpg
+
+--- Metrics for Pair 1 [SIFT] ---
+Keypoints in Source: 10136 | Keypoints in Destination: 10906
+Initial Matches (Lowe's Test): 3350
+RANSAC Inliers: 3214
+Inlier Ratio: 95.94%
+Extraction & Matching Time: 0.1198s
+
+--- Metrics for Pair 2 [SIFT] ---
+Keypoints in Source: 12114 | Keypoints in Destination: 17805
+Initial Matches (Lowe's Test): 3039
+RANSAC Inliers: 2928
+Inlier Ratio: 96.35%
+Extraction & Matching Time: 0.2315s
+
+[✓] Finished SIFT Panorama in 1.0447s total.
+[✓] Saved final panorama: final_panorama_SIFT.jpg
+(venv) papakowdadson@Papas-MacBook-Pro 1 % 
+
+
+
+=== RUNNING ORB PIPELINE ===
+[✓] Saved prepared grayscale image: prepared_grayscale_img_1.jpg
+[✓] Saved prepared grayscale image: prepared_grayscale_img_2.jpg
+[✓] Saved prepared grayscale image: prepared_grayscale_img_3.jpg
+[✓] Saved keypoints visualization (3000 points): keypoints_img_1_ORB.jpg
+[✓] Saved keypoints visualization (3000 points): keypoints_img_2_ORB.jpg
+[✓] Saved keypoints visualization (3000 points): keypoints_img_3_ORB.jpg
+
+--- Metrics for Pair 1 [ORB] ---
+Keypoints in Source: 3000 | Keypoints in Destination: 3000
+Initial Matches (Lowe's Test): 457
+RANSAC Inliers: 429
+Inlier Ratio: 93.87%
+Extraction & Matching Time: 0.0288s
+
+--- Metrics for Pair 2 [ORB] ---
+Keypoints in Source: 3000 | Keypoints in Destination: 3000
+Initial Matches (Lowe's Test): 267
+RANSAC Inliers: 204
+Inlier Ratio: 76.40%
+Extraction & Matching Time: 0.0363s
+
+[✓] Finished ORB Panorama in 0.3410s total.
+[✓] Saved final panorama: final_panorama_ORB.jpg
