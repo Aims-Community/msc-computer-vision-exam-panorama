@@ -2,9 +2,9 @@ This repository contains a structured Python solution to perform image stitching
 
 ---
 
-## 📋 Assignment Requirements & Implementation Pipeline
+## 📋 Exam Requirements & Implementation Pipeline
 
-The assignment is executed in 7 consecutive steps, outlined below with their technical mechanism:
+The exam is executed in 7 consecutive steps, outlined below with their technical mechanism:
 
 ### 1. Detect SIFT Features
 * **Mechanism:** The Scale-Invariant Feature Transform (SIFT) algorithm applies a Difference-of-Gaussians (DoG) filter across multiple scale spaces to identify highly stable local extrema (points of interest such as corners, edges, and high-contrast vertices). These keypoints are selected because they are uniquely identifiable and invariant to scale and rotation.
