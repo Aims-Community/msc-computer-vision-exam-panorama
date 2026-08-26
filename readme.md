@@ -1,4 +1,4 @@
-This repository contains a structured Python solution to perform image stitching using traditional computer vision techniques. The pipeline processes two overlapping images to automatically construct a unified panoramic canvas.
+This repository contains a structured Python solution to perform image stitching using traditional computer vision techniques. The pipeline processes three or more overlapping images to automatically construct a unified panoramic canvas.
 
 ---
 
@@ -29,22 +29,52 @@ Our implementation detected 35847 keypoints in left image and 27252 in right ima
   2. Computes a trial homography matrix.
   3. Validates the matrix against all remaining matches, tallying the number of "inliers" falling within a geometric distance threshold. For instance, 5 pixels.
   The homography matrix with the maximum number of consensus inliers is selected as the optimal model.
-  The Estimated Homography Matrix is
- [[ 1.71029256e+00  1.41241697e-02 -2.14159117e+03]
- [ 1.63690188e-01  1.48206973e+00 -2.76840963e+02]
- [ 2.48972525e-04 -7.62961926e-06  1.00000000e+00]]
 
 ### 6. Produce a Panorama
 * **Mechanism:** The source image is transformed into the coordinate space of the destination canvas using `cv2.warpPerspective` with the calculated homography matrix $H$. The second image is then laid down as the anchor frame. Finally, the canvas is automatically cropped to remove extraneous black borders generated during the geometric warping process.
-The Panorama image generated is save as panarama_result.jpg
+The Panorama image generated is save as final_panorama_[Feature Detector].jpg
 
 ### 7. Analyze Failure Cases
-Even robust SIFT + RANSAC frameworks fail under specific environmental and geometric bounds:
+Even robust SIFT/ORB + RANSAC frameworks fail under specific environmental and geometric bounds:
 * **Textureless / Low-Contrast Environments:** Scenes dominated by featureless surfaces such as blank walls, smooth skies, and heavy fog do not yield sufficient local gradients. SIFT fails to extract keypoints, preventing homography computation entirely.
 * **Repetitive Patterns (Perceptual Ambiguity):** Structures like building facades with identical window grids, fences, or tiling cause multiple keypoints to yield nearly identical descriptor vectors. Consequently, Lowe's Ratio Test filters them out as ambiguous, leaving insufficient data for RANSAC.
 * **Geometric Parallax (Translational Camera Movements):** Pure homography strictly assumes either a completely flat 2D scene or that the camera underwent pure rotation around its optical center. If the camera physically translates between shots, objects at varying depths shift relative to each other (parallax), creating severe blending ghosts and stitch misalignments.
 * **Dynamic / Moving Elements:** If elements change position within the overlapping zone between shots such as moving pedestrians or cars, the system will either generate dual artifacts (ghosts), cut the objects in half, or discard the regions as outliers during RANSAC.
 
+
+### 8. Results
+=== RUNNING ORB PIPELINE ===
+[✓] Saved prepared grayscale image: prepared_grayscale_img_1.jpg
+[✓] Saved prepared grayscale image: prepared_grayscale_img_2.jpg
+[✓] Saved prepared grayscale image: prepared_grayscale_img_3.jpg
+[✓] Saved keypoints visualization (3000 points): keypoints_img_1_ORB.jpg
+[✓] Saved keypoints visualization (3000 points): keypoints_img_2_ORB.jpg
+[✓] Saved keypoints visualization (3000 points): keypoints_img_3_ORB.jpg
+
+--- Metrics for Pair 1 [ORB] ---
+Estimated Homography Matrix:
+[[ 1.00271947e+00 -3.02590422e-04 -6.35548616e+02]
+ [ 5.52993816e-03  9.99713846e-01 -1.26054884e+02]
+ [ 4.62011246e-06 -2.51281671e-06  1.00000000e+00]]
+Keypoints in Source: 3000 | Keypoints in Destination: 3000
+Initial Matches (Lowe's Test): 457
+RANSAC Inliers: 429
+Inlier Ratio: 93.87%
+Extraction & Matching Time: 0.0362s
+
+--- Metrics for Pair 2 [ORB] ---
+Estimated Homography Matrix:
+[[ 9.71387623e-01 -3.46792910e-03 -8.30850644e+02]
+ [-2.30065927e-02  9.72822566e-01 -9.41904929e+01]
+ [-2.53958388e-05 -2.00553330e-06  1.00000000e+00]]
+Keypoints in Source: 3000 | Keypoints in Destination: 3000
+Initial Matches (Lowe's Test): 267
+RANSAC Inliers: 204
+Inlier Ratio: 76.40%
+Extraction & Matching Time: 0.0369s
+
+[✓] Finished ORB Panorama in 0.3804s total.
+[✓] Saved final panorama: final_panorama_ORB.jpg
 ---
 
 ## 💻 Set up environment
@@ -59,63 +89,12 @@ Ensure you have Python installed alongside the following dependencies:
 
 ```bash
 pip install opencv-python numpy matplotlib
-python ass1.py
+python 22424761.py
 ```
 
+## Transforming View
+```bash
+  python transformimage.py
+```
 
-
-
-
-python 22424761.py
-=== RUNNING SIFT PIPELINE ===
-[✓] Saved prepared grayscale image: prepared_grayscale_img_1.jpg
-[✓] Saved prepared grayscale image: prepared_grayscale_img_2.jpg
-[✓] Saved prepared grayscale image: prepared_grayscale_img_3.jpg
-[✓] Saved keypoints visualization (10136 points): keypoints_img_1_SIFT.jpg
-[✓] Saved keypoints visualization (10906 points): keypoints_img_2_SIFT.jpg
-[✓] Saved keypoints visualization (12114 points): keypoints_img_3_SIFT.jpg
-
---- Metrics for Pair 1 [SIFT] ---
-Keypoints in Source: 10136 | Keypoints in Destination: 10906
-Initial Matches (Lowe's Test): 3350
-RANSAC Inliers: 3214
-Inlier Ratio: 95.94%
-Extraction & Matching Time: 0.1198s
-
---- Metrics for Pair 2 [SIFT] ---
-Keypoints in Source: 12114 | Keypoints in Destination: 17805
-Initial Matches (Lowe's Test): 3039
-RANSAC Inliers: 2928
-Inlier Ratio: 96.35%
-Extraction & Matching Time: 0.2315s
-
-[✓] Finished SIFT Panorama in 1.0447s total.
-[✓] Saved final panorama: final_panorama_SIFT.jpg
-(venv) papakowdadson@Papas-MacBook-Pro 1 % 
-
-
-
-=== RUNNING ORB PIPELINE ===
-[✓] Saved prepared grayscale image: prepared_grayscale_img_1.jpg
-[✓] Saved prepared grayscale image: prepared_grayscale_img_2.jpg
-[✓] Saved prepared grayscale image: prepared_grayscale_img_3.jpg
-[✓] Saved keypoints visualization (3000 points): keypoints_img_1_ORB.jpg
-[✓] Saved keypoints visualization (3000 points): keypoints_img_2_ORB.jpg
-[✓] Saved keypoints visualization (3000 points): keypoints_img_3_ORB.jpg
-
---- Metrics for Pair 1 [ORB] ---
-Keypoints in Source: 3000 | Keypoints in Destination: 3000
-Initial Matches (Lowe's Test): 457
-RANSAC Inliers: 429
-Inlier Ratio: 93.87%
-Extraction & Matching Time: 0.0288s
-
---- Metrics for Pair 2 [ORB] ---
-Keypoints in Source: 3000 | Keypoints in Destination: 3000
-Initial Matches (Lowe's Test): 267
-RANSAC Inliers: 204
-Inlier Ratio: 76.40%
-Extraction & Matching Time: 0.0363s
-
-[✓] Finished ORB Panorama in 0.3410s total.
-[✓] Saved final panorama: final_panorama_ORB.jpg
+Adjust ``` test_image_paths = ['testImages/left.png', 'testImages/right.png', 'testImages/top.png'] ``` in 22424761.py with route for images you want to use as test data

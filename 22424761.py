@@ -177,8 +177,8 @@ if __name__ == '__main__':
     test_image_paths = ['testImages/left.png', 'testImages/right.png', 'testImages/top.png']
 
     # Run 1: SIFT Pipeline
-    # print("=== RUNNING SIFT PIPELINE ===")
-    # sift_panorama = create_panorama(test_image_paths, method='SIFT')
+    print("=== RUNNING SIFT PIPELINE ===")
+    sift_panorama = create_panorama(test_image_paths, method='SIFT')
 
     # Run 2: ORB Pipeline for Comparative Analysis
     print("\n=== RUNNING ORB PIPELINE ===")
